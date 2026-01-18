@@ -1,10 +1,10 @@
 [project]
-name = "swinburne-skills-assessment"
-version = "0.0.3"
+name = "zpool-monitor"
+version = "0.0.1"
 authors = [
   { name="Jason But", email="jbut@swin.edu.au" },
 ]
-description = "Tools to Assess and Publish results from Swinburne Cisco Skills Exams"
+description = "ZPool Status Monitor - A 'pretty' replacement for the 'zpool status' command"
 readme = "README.md"
 requires-python = ">=3.11"
 classifiers = [
@@ -13,17 +13,11 @@ classifiers = [
 ]
 license = "MIT"
 license-files = ["LICEN[CS]E*"]
-dependencies = ["canvasapi", "cisco-validate-topology", "logging", "pythondialog", "rich"]
+dependencies = ["rich"]
 
 [project.scripts]
-assessment_config = "swinburne_skills_assessment.apps:assessment_config"
-skills_mark = "swinburne_skills_assessment.apps:skills_mark"
-conceded_pass = "swinburne_skills_assessment.conceded_pass:main"
-skills_display_student_result = "swinburne_skills_assessment.apps:skills_display_student_result"
-skills_stats = "swinburne_skills_assessment.apps:skills_stats"
-skills_publish = "swinburne_skills_publish.apps:skills_publish"
-skills_review = "swinburne_skills_assessment.apps:skills_review"
+zpool_mon = "zpool_monitor.apps:zpool_mon"
 
 [project.urls]
-Homepage = "https://github.com/jason-but/swinburne-skills-publish"
-Issues = "https://github.com/jason-but/swinburne-skills-publish/issues"
+Homepage = "https://github.com/jason-but/zpool-monitor"
+Issues = "https://github.com/jason-but/zpool-monitor/issues"
