@@ -46,7 +46,7 @@ options:
  ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── 
   Device Name      Size    State    Device                                              Read   Write   Checksum   Last Trim                      
  ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── 
-  jaybee_zfspool   13.0T   ONLINE                                                       0      0       0                                         
+  XXXXXX_zfspool   13.0T   ONLINE                                                       0      0       0                                         
     raidz1-0       13.0T   ONLINE                                                       0      0       0                                         
       bay_1_1      3.64T   ONLINE   ata-Samsung_SSD_870_EVO_4TB_XXXXXXXXXXXXXXX-part1   0      0       0          Sun 18 Jan 2026 12:01:33 AEDT  
       bay_1_2      3.64T   ONLINE   ata-CT4000MXXXXXXXX_XXXXXXXXXXXX-part1              0      0       0          Sun 18 Jan 2026 12:01:27 AEDT  

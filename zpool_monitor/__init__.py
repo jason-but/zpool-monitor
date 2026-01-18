@@ -9,3 +9,5 @@ from .scanstatus import ScanStatus
 from .zpool import ZPool
 
 from .monitor import Monitor, zpool_monitor_argparse
+
+from .apps import zpool_monitor
