@@ -11,6 +11,11 @@ Under development, not hosted on PiPi yet.
 
 For now you are on your own
 
+When done should be
+```console
+pip install zpool-monitor
+```
+
 ## Usage
 
 ```console
