@@ -7,14 +7,31 @@ Future versions will support a full screen app with a regular refresh rate.
 
 ## Installation
 
-Under development, not hosted on PiPi yet.
+To install globally, run:
 
-For now you are on your own
-
-When done should be
 ```console
 pip install zpool-monitor
 ```
+
+At this point the executable program `zpool_mon` can be executed as a regular command.
+
+### Alternative - Install within a Virtual Environment
+
+To create and install within a Virtual Environment
+
+```console
+python -m venv zpool_monitor
+. zpool_monitor/bin/activate
+pip install zpool-monitor
+```
+
+The application binary is installed in the `zpool_monitor/bin` directory and should be executed as:
+
+```console
+zpool_monitor/bin/zpool_mon
+```
+
+If you choose, you can soft-link this binary to anywhere else on the system and execture without entering the virtual environment.
 
 ## Usage
 
