@@ -44,27 +44,27 @@ class ScanStatus:
         match scan_data['state']:
             # Table contents for a completed scrub
             case 'FINISHED':
-                self.__status['Last Scrub Finished:'] = [f'🕓 {scan_data['end_time']}']
-                self.__status['Scanned:'] = [f'🔍 {scan_data['examined']}']
-                self.__status['Duration:'] = [f'⌛ {datetime.strptime(scan_data['end_time'], '%a %d %b %Y %H:%M:%S %Z') - datetime.strptime(scan_data['start_time'], '%a %d %b %Y %H:%M:%S %Z')}']
-                self.__status['Repaired:'] = [f'🪛 {scan_data['processed']} with {scan_data['errors']} errors']
+                self.__status['Last Scrub Finished:'] = [f'🕓 {datetime.fromtimestamp(scan_data['end_time']).strftime('%c')}']
+                self.__status['Scanned:'] = [f'🔍 {humanise(scan_data['examined'])}']
+                self.__status['Duration:'] = [f'⌛ {timedelta(seconds = scan_data['end_time'] - scan_data['start_time'])}']
+                self.__status['Repaired:'] = [f'🪛 {humanise(scan_data['processed'])} with {scan_data['errors']} errors']
 
             # Table contents for an in-progress scrub
             case 'SCANNING':
-                to_scan = dehumanise(scan_data['to_examine']) - dehumanise(scan_data['skipped'])
-                time_elapsed = datetime.now().timestamp() - int(scan_data['pass_start'])
-                issued = dehumanise(scan_data['issued'])
-                scan_complete = 100 * dehumanise(scan_data['examined']) / to_scan
+                to_scan = scan_data['to_examine'] - scan_data['skipped']
+                time_elapsed = datetime.now().timestamp() - scan_data['pass_start']
+                issued = scan_data['issued']
+                scan_complete = 100 * scan_data['examined'] / to_scan
                 issue_complete = 100 * issued / to_scan
                 issue_rate = max(issued / time_elapsed, 1)
                 time_left = timedelta(seconds=(to_scan - issued) / issue_rate)
 
-                self.__status['Started:'] = [f'🕓 {scan_data['start_time']}']
-                self.__status['Scanned:'] = [f'🔍 {scan_data['examined']} of {scan_data['to_examine']}',
+                self.__status['Started:'] = [f'🕓 {datetime.fromtimestamp(scan_data['start_time']).strftime('%c')}']
+                self.__status['Scanned:'] = [f'🔍 {humanise(scan_data['examined'])} of {humanise(scan_data['to_examine'])}',
                                              create_progress_renderable('', '', scan_complete)]
-                self.__status['Issued:'] = [f'🏁 {scan_data['issued']} of {scan_data['to_examine']} at {humanise(issue_rate)}/s',
+                self.__status['Issued:'] = [f'🏁 {humanise(issued)} of {humanise(scan_data['to_examine'])} at {humanise(issue_rate)}/s',
                                             create_progress_renderable('', f' ⏳️ {time_left} remaining', issue_complete)]
-                self.__status['Repaired:'] = [f'🪛 {scan_data['processed']}']
+                self.__status['Repaired:'] = [f'🪛 {humanise(scan_data['processed'])}']
 
             # Table contents for a scrub with an unknown state
             case _:
@@ -77,7 +77,7 @@ class ScanStatus:
 
         :param scan_data: JSON Scan Status output for single ZPool from 'zpool status' mapped to a dictionary
         """
-        self.__table_title = ['❌ Unknown Function Status']
+        self.__table_title = '❌ Unknown Function Status'
         self.__status['Unknown Function:'] = [scan_data['function']]
         self.__status['Unknown State:'] = [scan_data['state']]
         self.__status['Debug Data:'] = [Pretty(scan_data)]

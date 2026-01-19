@@ -26,7 +26,7 @@ class ZPool:
         self.__data = {'State:': f'{state_col.get(pool_data['state'], '[bold red]⚠️ ')}{pool_data['state']}'}
         if 'status' in pool_data: self.__data['Status:'] = f'[red]🚩 {pool_data['status'].translate(str.maketrans('\n', ' ', '\t'))}'
         if 'action' in pool_data: self.__data['Action:'] = f'[red]📝 {pool_data['action'].translate(str.maketrans('\n', ' ', '\t'))}'
-        self.__data['Errors:'] = 'No known data errors' if pool_data['error_count'] == '0' else f'[red]⚠️ Detected {pool_data} data errors'
+        self.__data['Errors:'] = 'No known data errors' if pool_data['error_count'] == 0 else f'[red]⚠️ Detected {pool_data['error_count']} data errors'
 
         self.__vdevs = VDEVS(pool_data['vdevs'])
 

@@ -63,7 +63,7 @@ class Monitor:
         Refresh the data stored in self.__pools by running 'zpool status' and parsing the output
         """
         # Import output of 'zpool status -t -j' for all nominated pools into a string
-        result = subprocess.run(['zpool', 'status', '-t', '-j'] + self.__arguments.poolname, capture_output=True, text=True, check=True)
+        result = subprocess.run(['zpool', 'status', '-t', '-j', '--json-int'] + self.__arguments.poolname, capture_output=True, text=True, check=True)
 
         # Output is in JSON format, the 'pools' key is a dictionary mapping pool names to pool data for all scanned pools
         self.__pools = [ZPool(pool_data) for pool_data in json.loads(result.stdout)['pools'].values()]
