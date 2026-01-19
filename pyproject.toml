@@ -1,6 +1,6 @@
 [project]
 name = "zpool-monitor"
-version = "0.0.1"
+version = "0.0.2"
 authors = [
   { name="Jason But", email="jbut@swin.edu.au" },
 ]
