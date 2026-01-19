@@ -50,7 +50,7 @@ def warning_colour_number(num_str: str) -> str:
 
 
 def create_progress_renderable(pre_bar_txt: str, post_bar_txt: str, percentage: float) -> Progress:
-    progress = Progress(TextColumn(pre_bar_txt), BarColumn(), '[process.percentage]{task.percentage:>6.2f}%' + post_bar_txt)
+    progress = Progress(TextColumn(pre_bar_txt), BarColumn(complete_style='cyan1'), '[process.percentage]{task.percentage:>6.2f}%' + post_bar_txt)
     task = progress.add_task(total=100, description='')
     progress.update(task, completed=percentage)
     return progress
