@@ -44,9 +44,9 @@ def dehumanise(size: str) -> float:
     return float(match.group(1)) * units[match.group(2)]
 
 
-def warning_colour_number(num_str: str) -> str:
-    """Return the provided string coloured as a warning if the string is not the value '0'"""
-    return f'{'[bold orange3]' if num_str != '0' else ''}{num_str}'
+def warning_colour_number(num: int) -> str:
+    """Return the provided number as a string, string is coloured if the number is not 0"""
+    return f'{'[bold orange3]' if num != 0 else ''}{num}'
 
 
 def create_progress_renderable(pre_bar_txt: str, post_bar_txt: str, percentage: float) -> Progress:
