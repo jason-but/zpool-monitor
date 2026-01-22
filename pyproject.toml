@@ -1,3 +1,7 @@
+[build-system]
+requires = ["setuptools >= 77.0.3"]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "zpool-monitor"
 version = "0.0.2"
@@ -21,3 +25,6 @@ zpool_mon = "zpool_monitor.apps:zpool_mon"
 [project.urls]
 Homepage = "https://github.com/jason-but/zpool-monitor"
 Issues = "https://github.com/jason-but/zpool-monitor/issues"
+
+[tool.setuptools.package-data]
+"zpool_monitor" = ["textual/dashboard.css"]

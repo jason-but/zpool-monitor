@@ -5,10 +5,15 @@ This module provides the Monitor class which can track multiple ZPools and outpu
 import argparse
 import subprocess
 import json
+import textwrap
 import rich.console
 
 # Import zpool.ZPool class
 from zpool_monitor.zpool import ZPool
+
+
+# ---------- Default Configuration ----------
+DEFAULT_REFRESH = 10  # polling interval
 
 
 # ---------- ArgParse Validators ----------
@@ -38,6 +43,14 @@ def zpool_monitor_argparse() -> argparse.Namespace:
                                      formatter_class=argparse.RawTextHelpFormatter,
                                      allow_abbrev=False
                                      )
+
+    parser.add_argument('-r', '--refresh', nargs='?', type=int, const=DEFAULT_REFRESH, default=None,
+                        help=textwrap.dedent(f'''\
+                        Run in live monitor mode
+                         o [REFRESH] specifies the ZPool monitoring refresh period (default={DEFAULT_REFRESH})
+                         o -r [REFRESH] [poolname] - Manually specify refresh period and ZPool name to monitor
+                         o -r -- [poolname] - Use default ({DEFAULT_REFRESH} refresh period with specified ZPool name to monitor''')
+                        )
     parser.add_argument('poolname', nargs='*', type=ValidPool(), help='ZPool name to monitor (default is all pools)')
 
     return parser.parse_args()

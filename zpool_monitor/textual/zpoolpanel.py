@@ -1,11 +1,18 @@
-from rich.table import Table
+"""
+This module provides the ZPoolPanel class which subclasses the Textual Static class to create a Panel that can be displayed in the dashboard. A single
+ZPoolPanel widget represents the current status of a single zpool on the system. The Widget contains a reactive member variable to allow a regular refresh
+and update of the data being displayed in the Panel.
+"""
 
+# Import System Libraries
+from rich.table import Table
 from textual.app import ComposeResult
 from textual.reactive import reactive
 from textual.widgets import Static
 from textual.containers import VerticalScroll
 
-from zpool_monitor import ZPool
+# Import zpool_monitor.zpool.ZPool class
+from ..zpool import ZPool
 
 
 class ZPoolPanel(Static):
@@ -18,7 +25,7 @@ class ZPoolPanel(Static):
     def __init__(self, zpool_data: ZPool, *, id: str | None = None) -> None:
         """
         Initialise the Panel by setting the initial ZPool statistics instance and creating variables to track the three Static Widgets
-        :param zpool_data:
+        :param zpool_data: Instance of ZPool containing the current ZPool statistics.
         :param id:
         """
         super().__init__(id=id, classes="panel")
@@ -31,7 +38,7 @@ class ZPoolPanel(Static):
         self._vdevs_table: Static | None = None
         self._scan_table: Static | None = None
 
-    # Internal Methods
+    # ---------- Internal Methods ----------
     def _refresh_panel(self) -> None:
         """
         Private method to refresh the static widgets for display
@@ -47,7 +54,7 @@ class ZPoolPanel(Static):
         self._vdevs_table.update(self.zpool_data.vdevs)
         self._scan_table.update(self.zpool_data.scan_stats)
 
-    # UI composition
+    # ---------- UI Composition ----------
     def compose(self) -> ComposeResult:
         """
         Construct the panel for display by textual.
@@ -69,7 +76,7 @@ class ZPoolPanel(Static):
         # Populate the three tables with values from zpool_status
         self._refresh_panel()
 
-    # Reactivity: keep panel synced with updates
+    # ---------- Reactive methods: Keep panel synced when updates occur ----------
     def watch_zpool_data(self, _old: ZPool | None, _new: ZPool | None) -> None:
         """
         Triggered when the reactive internal variable zpool_data is changed. We don't care about the changes, we just need to update the Panel
@@ -79,7 +86,7 @@ class ZPoolPanel(Static):
         """
         self._refresh_panel()
 
-    # Public Method to update zpool_data property
+    # ---------- Public Methods to allow updating of reactive member variables ----------
     def update_zpool_data(self, new_zpool_data: ZPool) -> None:
         """
         Update ZPool data for this panel with a new instance of ZPool.

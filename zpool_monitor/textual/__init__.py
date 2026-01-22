@@ -1,3 +1,3 @@
 from .zpoolpanel import ZPoolPanel
 
-from .dashboard import Dashboard
+from .dashboard import ZPoolDashboard

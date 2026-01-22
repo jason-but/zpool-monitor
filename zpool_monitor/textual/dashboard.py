@@ -1,53 +1,74 @@
+"""
+This module provides the ZPoolDashboard class which subclasses the Textual App class to create a Textual Application that acts as a Dashboard to poll and
+display current ZPool status.
+"""
 
-# home_dirs_dashboard.py
-from __future__ import annotations
-
+# Import System Libraries
 import asyncio
-import sys
-from datetime import datetime
 from typing import Dict
-
 from textual.app import App, ComposeResult
 from textual.containers import VerticalScroll, Grid, Vertical
-
 from textual.widgets import Header, Footer, Static, Label
 from textual.reactive import reactive
 from textual.timer import Timer
 
-from zpoolpanel import ZPoolPanel
-from zpool_monitor import Monitor, ZPool, zpool_monitor_argparse
+# Import zpool_monitor.zpool.ZPool, zpool_monitor.Monitor, and zpool.textual.ZPoolPanel classes
+from . import ZPoolPanel
+from .. import Monitor
+from ..zpool import ZPool
 
 
-
-# ====== Configuration ======
-REFRESH_SECONDS = 10  # polling interval
-# ===========================
-
-
-class Dashboard(App):
+class ZPoolDashboard(App):
     """
-    Textual app that displays a dashboard of tiles for each subdirectory
-    in the user's home directory. Tiles are refreshed every REFRESH_SECONDS.
+    Textual app that manages a Dashboard of ZPoolPanels to monitor the ongoing status of selected ZPools on the system. Features include:
+
+    - Panel contents are refreshed using a timer.
+    - Timer period can be manually changed via '+'/'-' key-bindings and mouse on UI.
+    - Immediate refresh can be manually triggered via 'r' key-binding and mouse on UI.
+    - Theme light/dark mode can be toggled via 'd' key-binding and mouse on UI.
+    - Theme can be selected via 't' key-binding and mouse on UI.
+    - Help available via ^p key binding and mouse on UI.
+    - Panels are scrollable if all data cannot fit within panel
     """
+    # ---------- App CSS Style Sheet ----------
     CSS_PATH = './dashboard.css'
 
+    # ---------- Key Bindings ----------
     BINDINGS = [
         ("r", "refresh_now", "Refresh now"),
         ("+", "increase_refresh", "Increase refresh period"),
         ("-", "decrease_refresh", "Decrease refresh period"),
-        ("t", "app.toggle_dark", "Toggle dark mode"),
+        ("d", "app.toggle_dark", "Toggle dark mode"),
+        ("t", "app.change_theme", "Select new Theme"),
         ("q", "quit", "Quit"),
     ]
 
     # Refresh timer parameters
     refresh_period: reactive[int | None] = reactive(None)
 
-    def __init__(self, arguments, **kwargs):
+    def __init__(self, monitor: Monitor, initial_refresh: int, **kwargs):
+        """
+        Construct the Application class by initialising internal variables.
+
+        :param monitor: Instance of Monitor to be used to fetch updated ZPool data.
+        :param initial_refresh: Initial refresh period for App.
+        :param kwargs: Arguments to pass to superclass App().
+        """
         super().__init__(**kwargs)
-        self.__monitor = Monitor(arguments)
+        self.__monitor = monitor
+        self.__initial_refresh = initial_refresh
         self.__timer: Timer | None = None
 
+    # ---------- UI Composition ----------
     def compose(self) -> ComposeResult:
+        """
+        Construct the dashboard for display by textual.
+
+        Dashboard consists of a Header (with clock), a footer (with key-bindings), and a Vertical layout that will eventually hold one or more instances of
+        a ZPoolPanel widget
+
+        :return: A ComposeResult iterable that will yield the sub-widgets for the dashboard.
+        """
         yield Header(icon="🔍", id="header", show_clock=True)
         # Something like this but need to make the panels only as big as they NEED to be
         self._grid = Vertical(id="body")
@@ -59,16 +80,16 @@ class Dashboard(App):
 
         yield Footer(id="footer")
 
+    # ---------- Initial Construction ----------
     async def on_mount(self) -> None:
         """
         Initial population of the display and install timer for periodic updates
         """
         self.title = "ZPool Monitor"
         await self.refresh_panels()
-        self.refresh_period = REFRESH_SECONDS
+        self.refresh_period = self.__initial_refresh
 
-    # -------------------------------------------
-    # Refresh Timer related methods
+    # ---------- Refresh Timer related methods ----------
     def action_increase_refresh(self) -> None:
         """Increase the refresh period by one second up to a maximum of 60 seconds"""
         self.refresh_period = min(self.refresh_period + 1, 60)
@@ -89,17 +110,15 @@ class Dashboard(App):
         self.sub_title = f'Refresh period: ⏱️ ({self.refresh_period}s)'
         self.__timer = self.set_interval(self.refresh_period)
 
-    # -------------------------------------------
+    # ---------- Manual refresh related methods ----------
     # Manual refresh related methods
     async def action_refresh_now(self) -> None:
         """
         Activated when user presses "r" to implement an immediate refresh. Call refresh_panels() to update the display
-        :return:
         """
         await self.refresh_panels()
 
-    # -------------------------------------------
-    # Refreshing dashboard related methods
+    # ---------- Refreshing dashboard related methods ----------
     async def refresh_panels(self) -> None:
         """
         Use the inbuilt Monitor instance to rescan and update the ZPool status. Then update the ZPoolPanel instances with the new data.
