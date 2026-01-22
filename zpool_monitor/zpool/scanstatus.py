@@ -10,8 +10,8 @@ from rich import box
 from rich.pretty import Pretty
 from rich.table import Table
 
-# Import zpool_monitor modules
-from .utilities import humanise, dehumanise, create_progress_renderable
+# Import zpool.formatting functions
+from . import humanise, create_progress_renderable
 
 
 class ScanStatus:

@@ -1,10 +1,10 @@
-from .utilities import humanise, dehumanise, warning_colour_number, create_progress_renderable
+from zpool_monitor.zpool.formatting import humanise, warning_colour_number, create_progress_renderable
 
-from .vdev import VDEV
+from zpool_monitor.zpool.vdev import VDEV
 
-from .vdevs import VDEVS
+from zpool_monitor.zpool.vdevs import VDEVS
 
-from .scanstatus import ScanStatus
+from zpool_monitor.zpool.scanstatus import ScanStatus
 
 from .zpool import ZPool
 

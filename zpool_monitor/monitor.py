@@ -7,8 +7,8 @@ import subprocess
 import json
 import rich.console
 
-# Import zpool_monitor modules
-from .zpool import ZPool
+# Import zpool.ZPool class
+from zpool_monitor.zpool import ZPool
 
 
 # ---------- ArgParse Validators ----------

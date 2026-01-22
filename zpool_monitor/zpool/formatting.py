@@ -25,31 +25,21 @@ def humanise(size: float) -> str:
     return f'{size / (1024 ** index):.2f}{units[index]}'
 
 
-def dehumanise(size: str) -> float:
-    """
-    Convert human-readable size string to a floating point number (e.g. '2K' --> 2048.0)
-
-    :param size: String to convert
-
-    :return: Number converted to floating point in base Units
-    """
-    # Split string into number followed by size prefix
-    pattern = r"^(\d+\.?\d*)([a-zA-Z]+)$"
-    match = re.match(pattern, size)
-    if not match: raise ValueError(f"Can't convert {size!r} to bytes")
-
-    units = {'B': 1, 'K': 1024, 'M': 1024**2, 'G': 1024**3, 'T': 1024**4, 'P': 1024**5}
-    if match.group(2) not in units: raise ValueError(f"Suffix {match.group(2)} is invalid")
-
-    return float(match.group(1)) * units[match.group(2)]
-
-
 def warning_colour_number(num: int) -> str:
     """Return the provided number as a string, string is coloured if the number is not 0"""
     return f'{'[bold orange3]' if num != 0 else ''}{num}'
 
 
 def create_progress_renderable(pre_bar_txt: str, post_bar_txt: str, percentage: float) -> Progress:
+    """
+    Create and return a rich Progress renderable with the progress bar advanced to the nominated percentage.
+
+    :param pre_bar_txt: Text to insert before the physical progress bar
+    :param post_bar_txt: Text to insert after the progress bar AND a percentage complete display
+    :param percentage: Advance progress of Progress to 'percentage' complete
+
+    :return: Rich Progress Renderable decorated/set with the provided properties
+    """
     progress = Progress(TextColumn(pre_bar_txt), BarColumn(complete_style='cyan1'), '[process.percentage]{task.percentage:>6.2f}%' + post_bar_txt)
     task = progress.add_task(total=100, description='')
     progress.update(task, completed=percentage)

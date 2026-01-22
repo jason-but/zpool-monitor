@@ -7,10 +7,8 @@ the pool can then be accessed as rich renderables for display
 from rich import box
 from rich.table import Table
 
-# Import zpool_monitor modules
-from .utilities import humanise, dehumanise, warning_colour_number, create_progress_renderable
-from .vdevs import VDEVS
-from .scanstatus import ScanStatus
+# Import zpool.VDEV and zpool.ScanStatus classes
+from . import VDEVS, ScanStatus
 
 
 class ZPool:

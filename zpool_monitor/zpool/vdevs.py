@@ -7,8 +7,8 @@ can then be accessed as a rich Table for display
 from rich.table import Table
 from rich import box
 
-# Import zpool_monitor modules
-from .vdev import VDEV
+# Import zpool.VDEV class
+from . import VDEV
 
 
 class VDEVS:

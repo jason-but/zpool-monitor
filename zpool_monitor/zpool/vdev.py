@@ -4,11 +4,12 @@ can then be accessed as a list of data to insert into table cells for display
 """
 
 # Import System Libraries
-from datetime import datetime, timedelta
+from datetime import datetime
 from rich.padding import Padding
 
-# Import zpool_monitor modules
-from .utilities import humanise, dehumanise, warning_colour_number, create_progress_renderable
+# Import zpool.formatting functions
+from . import humanise, warning_colour_number, create_progress_renderable
+
 
 class VDEV:
     """
