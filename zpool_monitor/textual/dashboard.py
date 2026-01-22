@@ -108,7 +108,7 @@ class ZPoolDashboard(App):
         """
         if self.__timer: self.__timer.stop()
         self.sub_title = f'Refresh period: ⏱️ ({self.refresh_period}s)'
-        self.__timer = self.set_interval(self.refresh_period)
+        self.__timer = self.set_interval(self.refresh_period, self.refresh_panels)
 
     # ---------- Manual refresh related methods ----------
     # Manual refresh related methods
