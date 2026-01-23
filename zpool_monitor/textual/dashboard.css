@@ -1,64 +1,69 @@
-    Header {
-        dock: top;
-        text-style: bold;
-        color: yellow;
-    }
+/* Header Widget */
+Header {
+    dock: top;                   /* Docked to top of screen */
+    text-style: bold;            /* Header Title font style */
+    color: $accent;              /* Header Title font colour */
+}
 
-    /* Footer is docked to the bottom */
-    Footer {
-        dock: bottom;
-    }
+/* Footer is docked to the bottom */
+Footer {
+    dock: bottom;                /* Docked to bottom of screen */
 
-    /* Main screen of dashboard has a vertical layout */
-    Screen {
-        layout: vertical;
-        overflow: hidden;
-    }
-/*
-    #body {
-        height: 1fr;
-        overflow: hidden;
-    }
+}
+
+/* Vertical Container Widget representing main body of Dashboard
+   - Single instance assigned a class of 'panels'
+   - All panels displayed vertically
 */
+.panelas {
+    width: 50%;     /* For testing, set width of display */
+    height: 1fr;                 /* VerticalScoll instance should fill - but not overflow - screen */
+    overflow: auto;              /* Assign a scroll-bar if needed */
+    padding: 1;                  /* Buffer space of one character from edge of header, footer, and edge of screen */
+}
 
+/* ZPoolPanel Widget
+   - All instances assigned a class of 'zpoolpanel'
+*/
+.zpoolpanel {
+    border: round;               /* Style and colour of border around panel */
+    height: 1fr;                /* Should allow panel to grow as tall as is required */
+/*        max-height: 20;              /* For testing, set max-height */
+    border-title-style: bold;    /* Panel Title font style */
+    border-title-color: $accent; /* Panel Title text colour */
+    padding: 0 1 0 1;            /* Padding between border and Panel content: 1 character at left and right, none at top and bottom */
+    margin: 1 0;                 /* Spacing between panels in layout: 1 character between panels */
+}
 
-/*    Grid#panels { */
-    Vertical#body {
-        width: 100%;
-        padding: 1 2;
-        grid-gutter: 1 2;
-        overflow: hidden;
-        height: 1fr;
-        grid-size: 1; /* number of columns (adjust as desired) */
-        /*grid-rows: auto; */
-        /* When terminal is narrow, Textual will wrap; you can also tweak via responsive rules */
-    }
+Static {
+    height: auto;
+}
 
-    /* ZPoolPanel widgets sets it class as "panel" matching this block */
-    .panel {
-/*        border: round ansi_bright_cyan; /* Colour of border around panel */
-        border: round ansi_bright_cyan; /* Colour of border around panel */
-        height: auto;                   /* Should allow panel to grow as tall as is required */
-        max-height: 20;
-        border-title-color: $text;      /* Default text colour for panel title */
-        padding: 0 1 0 1;               /* Set 1 character padding at left and right of panel, none at top and bottom */
-    }
+/* Style for VerticalScroll layout container within each ZPoolPanel Widget */
+/*  - Assigned class of zpoolscroller in code
+    - Each ZPoolPanel Widget
+    - Needed if:
+      o Too many Panels to fit on screen
+      o Panels contain too much content
 
-    /* Tables within ZPoolPanel
-       status_table - auto height, no padding around table
-       vdevs_table  - auto height, add one row spacing after table
-       scan_table   - auto height, no padding around table
-    */
-    #status_table, #scan_table {
-        height: auto;
-        margin-bottom: 0;
-    }
+/* Style for all widgets assigned a class of zpoolscroller */
+.zapoolscroller {
+    height: auto;    /* */
+/*      overflow: auto;  /* */
+}
 
-    #vdevs_table {
-        height: auto;
-        margin-bottom: 1;
-    }
+/* Style for Static Widgets displaying Rich Tables within a ZPoolPanel Widget
+   - Assigned IDs of:
+     - #status_table: Display summary property of ZPool instance
+     - #vdevs_table:  Display vdevs property of ZPool instance
+     - #scan_table:   Display scan_stats property of ZPool instance
+*/
+#status_table, #scan_table {
+    height: auto;                /* Height is exact fit for table */
+    margin-bottom: 0;            /* No padding around table */
+}
 
-    .panel:focus {
-        border: round $accent;
-    }
+#vdevs_table {
+    height: auto;                /* Height is exact fit for table */
+    margin-bottom: 1;            /* Add one row spacing after table */
+}

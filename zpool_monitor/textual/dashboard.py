@@ -7,8 +7,8 @@ display current ZPool status.
 import asyncio
 from typing import Dict
 from textual.app import App, ComposeResult
-from textual.containers import VerticalScroll, Grid, Vertical
-from textual.widgets import Header, Footer, Static, Label
+from textual.containers import VerticalScroll, Grid, Vertical, VerticalGroup
+from textual.widgets import Header, Footer
 from textual.reactive import reactive
 from textual.timer import Timer
 
@@ -36,8 +36,8 @@ class ZPoolDashboard(App):
     # ---------- Key Bindings ----------
     BINDINGS = [
         ("r", "refresh_now", "Refresh now"),
-        ("+", "increase_refresh", "Increase refresh period"),
-        ("-", "decrease_refresh", "Decrease refresh period"),
+        ("up", "increase_refresh", "Increase refresh period"),
+        ("down", "decrease_refresh", "Decrease refresh period"),
         ("d", "app.toggle_dark", "Toggle dark mode"),
         ("t", "app.change_theme", "Select new Theme"),
         ("q", "quit", "Quit"),
@@ -69,14 +69,11 @@ class ZPoolDashboard(App):
 
         :return: A ComposeResult iterable that will yield the sub-widgets for the dashboard.
         """
-        yield Header(icon="🔍", id="header", show_clock=True)
-        # Something like this but need to make the panels only as big as they NEED to be
-        self._grid = Vertical(id="body")
-        yield self._grid
-        # This works better, but all panels are equal height and fitted to screen
-        # with VerticalScroll(id="body"):
-        #     self._grid = Grid(id="panels")
-        #     yield self._grid
+        yield Header(icon="🔍", id="header")
+
+        self._body = Vertical(classes='panels')
+        # self._body = VerticalScroll(classes='panels')
+        yield self._body
 
         yield Footer(id="footer")
 
@@ -107,7 +104,7 @@ class ZPoolDashboard(App):
         3) Recreate timer with the new refresh period to call refresh_panels() every refresh_period seconds
         """
         if self.__timer: self.__timer.stop()
-        self.sub_title = f'Refresh period: ⏱️ ({self.refresh_period}s)'
+        self.sub_title = f'Refresh period: (⏱️ {self.refresh_period} seconds)'
         self.__timer = self.set_interval(self.refresh_period, self.refresh_panels)
 
     # ---------- Manual refresh related methods ----------
@@ -129,7 +126,7 @@ class ZPoolDashboard(App):
         scanned_pools: Dict[str, ZPool] = await asyncio.to_thread(lambda: self.__monitor.refresh_stats())
 
         # Retrieve all panels currently monitoring a pool
-        current_panels: Dict[str, ZPoolPanel] = {panel.zpool_data.poolname: panel for panel in self._grid.children if isinstance(panel, ZPoolPanel) and panel.zpool_data.poolname}
+        current_panels: Dict[str, ZPoolPanel] = {panel.zpool_data.poolname: panel for panel in self._body.children if isinstance(panel, ZPoolPanel) and panel.zpool_data.poolname}
 
         # new_pools is a set of all pool names that do not already have a panel
         new_pools = scanned_pools.keys() - current_panels.keys()
@@ -143,7 +140,7 @@ class ZPoolDashboard(App):
         # Add new panels
         for poolname in sorted(new_pools):
             panel = ZPoolPanel(scanned_pools[poolname], id=f'panel_{poolname}')
-            await self._grid.mount(panel)
+            await self._body.mount(panel)
 
         # Update existing panels
         for poolname in existing_pools:
