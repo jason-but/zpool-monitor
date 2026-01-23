@@ -11,6 +11,9 @@ import rich.console
 # Import zpool.ZPool class
 from zpool_monitor.zpool import ZPool
 
+from textual.theme import BUILTIN_THEMES
+THEME_LIST = list(BUILTIN_THEMES.keys())
+DEFAULT_THEME = THEME_LIST[0]
 
 # ---------- Default Configuration ----------
 DEFAULT_REFRESH = 10  # polling interval
@@ -51,6 +54,7 @@ def zpool_monitor_argparse() -> argparse.Namespace:
                          o -r [REFRESH] [poolname] - Manually specify refresh period and ZPool name to monitor
                          o -r -- [poolname] - Use default ({DEFAULT_REFRESH} refresh period with specified ZPool name to monitor''')
                         )
+    parser.add_argument('-t', '--theme', default='', choices=THEME_LIST, help=f'Select live monitor mode theme (default={DEFAULT_THEME})')
     parser.add_argument('poolname', nargs='*', type=ValidPool(), help='ZPool name to monitor (default is all pools)')
 
     return parser.parse_args()
