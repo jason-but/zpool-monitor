@@ -39,7 +39,7 @@ The first application installed as part of this package is `zpool_status`.
 
 Usage instructions can be seen in the screenshot below.
 
-![zpool_status help](https://github.com/jason-but/zpool-monitor/blob/master/screenshots/zpool_status_help.png)
+![zpool_status help](https://github.com/jason-but/zpool-monitor/blob/master/screenshots/zpool_status_help.png?raw=true)
 
 
 | Command-line Parameter | Description                                                                                                                                                                                                                                                                                   |
@@ -50,7 +50,7 @@ Usage instructions can be seen in the screenshot below.
 
 Screenshot of execution on a healthy pool.
 
-![zpool_status healthy](https://github.com/jason-but/zpool-monitor/blob/master/screenshots/zpool_status_healthy.png)
+![zpool_status healthy](https://github.com/jason-but/zpool-monitor/blob/master/screenshots/zpool_status_healthy.png?raw=true)
 
 The `zpool_status` command offers the following features:
 
@@ -78,7 +78,7 @@ ZPool status.
 
 Usage instructions can be seen in the screenshot below.
 
-![zpool_monitor help](https://github.com/jason-but/zpool-monitor/blob/master/screenshots/zpool_monitor_help.png)
+![zpool_monitor help](https://github.com/jason-but/zpool-monitor/blob/master/screenshots/zpool_monitor_help.png?raw=true)
 
 | Command-line Parameter | Description                                                                                                                                                                                                                                                                                     |
 |:-----------------------|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
