@@ -33,58 +33,61 @@ zpool_monitor/bin/zpool_mon
 
 If you choose, you can soft-link this binary to anywhere else on the system and execture without entering the virtual environment.
 
-## Usage
+## ZPool Status
+
+The first application installed as part of this package is `zpool_status`. Usage instructions can be seend in the screenshot below.
 
 ![zpool_status help](https://github.com/jason-but/zpool-monitor/blob/master/screenshots/zpool_status_help.png)
 
-```console
-# zpool_mon -h
-usage: zpool_mon [-h] [poolname ...]
 
-🔍 ZPool Status Monitor
+| Command-line Parameter | Description                                                                                                                                                                                                                                                                                   |
+|:-----------------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `poolname`             | Same functionality as listing a pool when executing `zpool status [pool]`. If not specified, will default to scanning all pools on system. You can optionally provide as many pool names as you wish. **NOTE: provided names are checked to see if they are valid poolnames on your system.** |
 
-A 'pretty' replacement for the 'zpool status' command
+### Execution
 
-positional arguments:
-  poolname    ZPool name to monitor (default is all pools)
+Screenshot of execution on a healthy pool.
 
-options:
-  -h, --help  show this help message and exit
+![zpool_status healthy](https://github.com/jason-but/zpool-monitor/blob/master/screenshots/zpool_status_healthy.png)
 
-```
+The `zpool_status` command offers the following features:
 
-| Command-line Parameter | Description                                                                                                                                                                                                  |
-|:-----------------------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `poolname`             | Same functionality as listing a pool when executing `zpool status [pool]`. If not specified, will default to scanning all pools on system. Can specify, 0(all pools), 1(single pool) or multiple pool names. |
+ - Each pool is separated by a horizontal rule
+ - Healthy pools/VDEVs are coloured green, any issues will be displayed in a different colour
+ - The last scrub/resilver is displayed in a nice table. If a scrub/resilver is in progress, it will be displayed as a progress bar with estimated completion time
+ - If a VDEV has been trimmed it will show the last time it was trimmed. If a trim is in progress, it will be displayed as a progress bar
 
-## Execution
+Other screenshots are listed below.
 
-```console
-# zpool_mon
-──────────────────────────────────────────────────────────── ZPool - jaybee_zfspool ────────────────────────────────────────────────────────────
-                                  
-  State:    ONLINE                
-  Errors:   No known data errors  
-                                  
- 🔍 Details                                                                                                                                      
- ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── 
-  Device Name      Size    State    Device                                              Read   Write   Checksum   Last Trim                      
- ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── 
-  XXXXXX_zfspool   13.0T   ONLINE                                                       0      0       0                                         
-    raidz1-0       13.0T   ONLINE                                                       0      0       0                                         
-      bay_1_1      3.64T   ONLINE   ata-Samsung_SSD_870_EVO_4TB_XXXXXXXXXXXXXXX-part1   0      0       0          Sun 18 Jan 2026 12:01:33 AEDT  
-      bay_1_2      3.64T   ONLINE   ata-CT4000MXXXXXXXX_XXXXXXXXXXXX-part1              0      0       0          Sun 18 Jan 2026 12:01:27 AEDT  
-      bay_1_3      3.64T   ONLINE   ata-Samsung_SSD_870_EVO_4TB_XXXXXXXXXXXXXXX-part1   0      0       0          Sun 18 Jan 2026 12:01:34 AEDT  
-      zfs_disk3    2.73T   ONLINE   ata-WDC_WD30EZRZ-00Z5HB0_WD-XXXXXXXXXXXX-part1      0      0       0                                         
-      zfs_disk4    2.73T   ONLINE   ata-WDC_WD30EZRZ-00Z5HB0_WD-XXXXXXXXXXXX-part1      0      0       0                                         
-      zfs_disk5    3.64T   ONLINE   ata-WDC_WD40EFRX-68N32N0_WD-XXXXXXXXXXXX-part1      0      0       0                                         
- ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── 
+#### Screenshot of Scrub in Progress
 
- 🧼 Scrub Status                                           
-                                                           
-  Last Scrub Finished:   🕓 Mon 12 Jan 2026 07:00:55 AEDT  
-  Scanned:               🔍 6.88T                          
-  Duration:              ⌛ 3:12:34                        
-  Repaired:              🪛 0B with 0 errors               
- 
-```
+TBA...
+
+#### Screenshot of Trim in Progress
+
+TBA...
+
+## ZPool Monitor
+
+The first application installed as part of this package is `zpool_monitor`.
+
+`zpool_monitor` is a [Textual](https://github.com/Textualize/textual) based application that will display a regularly updated dashboard containing the current
+ZPool status.
+
+Usage instructions can be seend in the screenshot below.
+
+![zpool_monitor help](https://github.com/jason-but/zpool-monitor/blob/master/screenshots/zpool_monitor_help.png)
+
+| Command-line Parameter | Description                                                                                                                                                                                                                                                                                   |
+|:-----------------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `-r REFRESH`           | Specify the initial refresh period used to update ZPool status. Default is 10 seconds. Period can be updated within the dashboard application.                                                                                                                                                |
+| `-t THEME`             | Specify the initial [Textual](https://github.com/Textualize/textual) theme to use in the dashboard. Theme can be switched within the dashboard application. **NOTE: requested theme is checked to see if it is a valid [Textual](https://github.com/Textualize/textual) theme.**              |
+| `poolname`             | Same functionality as listing a pool when executing `zpool status [pool]`. If not specified, will default to scanning all pools on system. You can optionally provide as many pool names as you wish. **NOTE: provided names are checked to see if they are valid poolnames on your system.** |
+
+### Screenshot
+
+TBA...
+
+### Navigating the Dashboard
+
+TBA...
