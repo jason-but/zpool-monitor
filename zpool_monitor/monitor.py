@@ -9,7 +9,7 @@ import textwrap
 import rich.console
 
 # Import zpool.ZPool class
-from zpool_monitor.zpool import ZPool
+from .zpool import ZPool
 
 from textual.theme import BUILTIN_THEMES
 THEME_LIST = list(BUILTIN_THEMES.keys())
@@ -35,6 +35,19 @@ class ValidPool:
         raise argparse.ArgumentTypeError(f'{arg} is not a valid pool name.')
 
 
+class ValidTheme:
+    """
+    Provides a callable object to validate if a given theme name is a valid textual theme.
+
+    This class is designed to be used for validating Theme names in the context of command-line argument parsing. When an instance of this class is called
+    with a Theme name, it checks if the theme exists within textual. If the theme does not exist, it raises an error suitable for argument parsing utilities.
+    """
+    def __call__(self, arg) -> str:
+        if arg in THEME_LIST: return arg
+
+        raise argparse.ArgumentTypeError(f'{arg} is not a valid theme name, please choose from one of: {', '.join(THEME_LIST)}')
+
+
 # ---------- ArgParse Function ----------
 def zpool_monitor_argparse() -> argparse.Namespace:
     """
@@ -54,7 +67,10 @@ def zpool_monitor_argparse() -> argparse.Namespace:
                          o -r [REFRESH] [poolname] - Manually specify refresh period and ZPool name to monitor
                          o -r -- [poolname] - Use default ({DEFAULT_REFRESH} refresh period with specified ZPool name to monitor''')
                         )
-    parser.add_argument('-t', '--theme', default='', choices=THEME_LIST, help=f'Select live monitor mode theme (default={DEFAULT_THEME})')
+    parser.add_argument('-t', '--theme', type=ValidTheme(), default=DEFAULT_THEME,
+                        help=f'Select live monitor mode theme (default={DEFAULT_THEME})\n o {'\n o '.join(THEME_LIST)}')
+
+
     parser.add_argument('poolname', nargs='*', type=ValidPool(), help='ZPool name to monitor (default is all pools)')
 
     return parser.parse_args()

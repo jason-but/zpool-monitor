@@ -36,8 +36,8 @@ class ZPoolDashboard(App):
     # ---------- Key Bindings ----------
     BINDINGS = [
         ("r", "refresh_now", "Refresh now"),
-        ("up", "increase_refresh", "Increase refresh period"),
-        ("down", "decrease_refresh", "Decrease refresh period"),
+        ("+", "increase_refresh", "Increase refresh period"),
+        ("-", "decrease_refresh", "Decrease refresh period"),
         ("d", "app.toggle_dark", "Toggle dark mode"),
         ("t", "app.change_theme", "Select new Theme"),
         ("q", "quit", "Quit"),
@@ -46,7 +46,7 @@ class ZPoolDashboard(App):
     # Refresh timer parameters
     refresh_period: reactive[int | None] = reactive(None)
 
-    def __init__(self, monitor: Monitor, initial_refresh: int, **kwargs):
+    def __init__(self, monitor: Monitor, initial_theme: str, initial_refresh: int, **kwargs):
         """
         Construct the Application class by initialising internal variables.
 
@@ -56,6 +56,7 @@ class ZPoolDashboard(App):
         """
         super().__init__(**kwargs)
         self.__monitor = monitor
+        self.theme = initial_theme
         self.__initial_refresh = initial_refresh
         self.__timer: Timer | None = None
 

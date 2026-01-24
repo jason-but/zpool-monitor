@@ -21,11 +21,11 @@ def zpool_mon() -> None:
         arguments = zpool_monitor_argparse()
 
         # Create the Monitor class to allow access to ZPool stats and to refresh them
-        monitor = Monitor(arguments)
+        monitor = Monitor(arguments=arguments)
 
         if arguments.refresh:
             # Running in live monitor mode, create and run the ZPoolDashboard textual App
-            ZPoolDashboard(monitor, arguments.refresh).run()
+            ZPoolDashboard(monitor=monitor, initial_theme=arguments.theme, initial_refresh=arguments.refresh).run()
 
         else:
             # Running in CLI mode, get current ZPool data and display to the console
