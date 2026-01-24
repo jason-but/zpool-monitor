@@ -20,7 +20,8 @@ license-files = ["LICEN[CS]E*"]
 dependencies = ["rich", "textual"]
 
 [project.scripts]
-zpool_mon = "zpool_monitor.apps:zpool_mon"
+zpool_status = "zpool_monitor.apps:zpool_status"
+zpool_mon = "zpool_monitor.apps:zpool_monitor"
 
 [project.urls]
 Homepage = "https://github.com/jason-but/zpool-monitor"
