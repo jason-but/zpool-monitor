@@ -37,11 +37,11 @@ class VDEV:
         # 5, 6, 7) Read/Write/Checksum error, coloured as a warning
         # 8) If the VDEV is trimmable, the current trim state (as returned by __parse_trim_state(), otherwise an empty string
         self.__data = {'Device Name': Padding(f'{VDEV.state_colours.get(vdev_data['state'], '[bold red]')}{vdev_data['name']}', (0, 0, 0, depth * 2)),
-                       'ASize': humanise(vdev_size) if vdev_size > 0 else '',
-                       'BState': f'{VDEV.state_colours.get(vdev_data['state'], '[bold red]')}{vdev_data['state']}',
+                       'Size': humanise(vdev_size) if vdev_size > 0 else '',
+                       'State': f'{VDEV.state_colours.get(vdev_data['state'], '[bold red]')}{vdev_data['state']}',
                        'Device': vdev_data.get('devid', vdev_data.get('path', '')),
                        'Read': warning_colour_number(vdev_data['read_errors']),
-                       'CWrite': warning_colour_number(vdev_data['write_errors']),
+                       'Write': warning_colour_number(vdev_data['write_errors']),
                        'Checksum': warning_colour_number(vdev_data['checksum_errors']),
                        'Last Trim': self.__parse_trim_state(vdev_data) if 'trim_notsup' in vdev_data else ''
                        }
