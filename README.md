@@ -35,6 +35,8 @@ If you choose, you can soft-link this binary to anywhere else on the system and 
 
 ## Usage
 
+![zpool_status help](https://github.com/jason-but/zpool-monitor/blob/master/screenshots/zpool_status_help.png)
+
 ```console
 # zpool_mon -h
 usage: zpool_mon [-h] [poolname ...]
