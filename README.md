@@ -18,16 +18,17 @@ At this point the executable programs `zpool_status` and `zpool_monitor` can be 
 To create and install within a Virtual Environment
 
 ```console
-python -m venv zpool_monitor
-. zpool_monitor/bin/activate
+python -m venv zpool_mon
+. zpool_mon/bin/activate
 pip install zpool-monitor
+deactivate
 ```
 
-The application binaries are installed in the `zpool_monitor/bin` directory and can be executed as:
+The application binaries are installed in the `zpool_mon/bin` directory and can be executed as:
 
 ```console
-zpool_monitor/bin/zpool_status
-zpool_monitor/bin/zpool_monitor
+zpool_mon/bin/zpool_status
+zpool_mon/bin/zpool_monitor
 ```
 
 If you choose, you can soft-link this binary to anywhere else on the system and execture without entering the virtual environment.
