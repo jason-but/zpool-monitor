@@ -17,7 +17,7 @@ classifiers = [
 ]
 license = "MIT"
 license-files = ["LICEN[CS]E*"]
-dependencies = ["rich", "textual"]
+dependencies = ["textual"]
 
 [project.scripts]
 zpool_status = "zpool_monitor.apps:zpool_status"
