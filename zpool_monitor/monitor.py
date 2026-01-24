@@ -9,82 +9,18 @@ import textwrap
 import rich.console
 
 # Import zpool.ZPool class
+from . import ValidPool, ValidTheme
 from .zpool import ZPool
 
-from textual.theme import BUILTIN_THEMES
-THEME_LIST = list(BUILTIN_THEMES.keys())
-DEFAULT_THEME = THEME_LIST[0]
 
-# ---------- Default Configuration ----------
-DEFAULT_REFRESH = 10  # polling interval
-
-
-# ---------- ArgParse Validators ----------
-class ValidPool:
-    """
-    Provides a callable object to validate if a given pool name is a valid ZPool.
-
-    This class is designed to be used for validating ZPool names in the context of command-line argument parsing. When an instance of this class is called
-    with a zpool name, it checks if the pool exists on the system. If the pool does not exist, it raises an error suitable for argument parsing utilities.
-    """
-    def __call__(self, arg) -> str:
-        result = subprocess.run(['zpool', 'list', '-H', '-o', 'name'], capture_output=True, text=True, check=True)
-        valid_pools = result.stdout.splitlines()
-        if arg in valid_pools: return arg
-
-        raise argparse.ArgumentTypeError(f'{arg} is not a valid pool name.')
-
-
-class ValidTheme:
-    """
-    Provides a callable object to validate if a given theme name is a valid textual theme.
-
-    This class is designed to be used for validating Theme names in the context of command-line argument parsing. When an instance of this class is called
-    with a Theme name, it checks if the theme exists within textual. If the theme does not exist, it raises an error suitable for argument parsing utilities.
-    """
-    def __call__(self, arg) -> str:
-        if arg in THEME_LIST: return arg
-
-        raise argparse.ArgumentTypeError(f'{arg} is not a valid theme name, please choose from one of: {', '.join(THEME_LIST)}')
-
-
-# ---------- ArgParse Function ----------
-def zpool_monitor_argparse() -> argparse.Namespace:
-    """
-    Create and return the argument parser for the zpool_monitor
-
-    :return: Namespace containing all command line arguments after parsing
-    """
-    parser = argparse.ArgumentParser(description='🔍 ZPool Status Monitor\n\nA \'pretty\' replacement for the \'zpool status\' command',
-                                     formatter_class=argparse.RawTextHelpFormatter,
-                                     allow_abbrev=False
-                                     )
-
-    parser.add_argument('-r', '--refresh', nargs='?', type=int, const=DEFAULT_REFRESH, default=None,
-                        help=textwrap.dedent(f'''\
-                        Run in live monitor mode
-                         o [REFRESH] specifies the ZPool monitoring refresh period (default={DEFAULT_REFRESH})
-                         o -r [REFRESH] [poolname] - Manually specify refresh period and ZPool name to monitor
-                         o -r -- [poolname] - Use default ({DEFAULT_REFRESH} refresh period with specified ZPool name to monitor''')
-                        )
-    parser.add_argument('-t', '--theme', type=ValidTheme(), default=DEFAULT_THEME,
-                        help=f'Select live monitor mode theme (default={DEFAULT_THEME})\n o {'\n o '.join(THEME_LIST)}')
-
-
-    parser.add_argument('poolname', nargs='*', type=ValidPool(), help='ZPool name to monitor (default is all pools)')
-
-    return parser.parse_args()
-
-
-# ---------- Monitor Class ----------
 class Monitor:
-    def __init__(self, arguments: argparse.Namespace):
+    def __init__(self, poolnames: list[str]):
         """
         Construct instance of class to monitor multipl ZPool instances
 
-        :param arguments: Command line parameters as parsed by zpool_monitor_argparse()
+        :param poolnames: List of selected ZPool names to monitor. An empty list means all pools are monitored.
         """
-        self.__arguments = arguments
+        self.__poolnames = poolnames
 
         # List containing statistics for all pools scanned
         self.__pools: dict[str, ZPool] = {}
@@ -94,7 +30,7 @@ class Monitor:
         Refresh the data stored in self.__pools by running 'zpool status' and parsing the output
         """
         # Import output of 'zpool status -t -j' for all nominated pools into a string
-        result = subprocess.run(['zpool', 'status', '-t', '-j', '--json-int'] + self.__arguments.poolname, capture_output=True, text=True, check=True)
+        result = subprocess.run(['zpool', 'status', '-t', '-j', '--json-int'] + self.__poolnames, capture_output=True, text=True, check=True)
 
         # Output is in JSON format, the 'pools' key is a dictionary mapping pool names to pool data for all scanned pools
         self.__pools = {poolname: ZPool(pool_data) for poolname, pool_data in json.loads(result.stdout)['pools'].items()}
