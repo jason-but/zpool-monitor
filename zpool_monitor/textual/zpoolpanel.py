@@ -28,7 +28,7 @@ class ZPoolPanel(Static):
         :param zpool_data: Instance of ZPool containing the current ZPool statistics.
         :param id:
         """
-        super().__init__(id=id, classes="zpoolpanel")
+        super().__init__(id=id, classes='zpoolpanel')
 
         # Update zpool_data without triggering a reactive watch()
         self.set_reactive(ZPoolPanel.zpool_data, zpool_data)
@@ -63,14 +63,14 @@ class ZPoolPanel(Static):
 
         :return: A ComposeResult iterable that will yield the sub-widgets for the panel.
         """
-        with VerticalScroll(classes="zpoolscroller"):
-            self._status_table = Static(Table(), id="status_table")
+        with VerticalScroll(classes='zpoolscroller'):
+            self._status_table = Static(Table(), id='status_table')
             yield self._status_table
 
-            self._vdevs_table = Static(Table(), id="vdevs_table")
+            self._vdevs_table = Static(Table(), id='vdevs_table')
             yield self._vdevs_table
 
-            self._scan_table = Static(Table(), id="scan_table")
+            self._scan_table = Static(Table(), id='scan_table')
             yield self._scan_table
 
         # Populate the three tables with values from zpool_status

@@ -35,12 +35,12 @@ class ZPoolDashboard(App):
 
     # ---------- Key Bindings ----------
     BINDINGS = [
-        ("r", "refresh_now", "Refresh now"),
-        ("+", "increase_refresh", "Increase refresh period"),
-        ("-", "decrease_refresh", "Decrease refresh period"),
-        ("d", "app.toggle_dark", "Toggle dark mode"),
-        ("t", "app.change_theme", "Select new Theme"),
-        ("q", "quit", "Quit"),
+        ('r', 'refresh_now', 'Refresh now'),
+        ('+', 'increase_refresh', 'Increase refresh period'),
+        ('-', 'decrease_refresh', 'Decrease refresh period'),
+        ('d', 'app.toggle_dark', 'Toggle dark mode'),
+        ('t', 'app.change_theme', 'Select new Theme'),
+        ('q', 'quit', 'Quit')
     ]
 
     # Refresh timer parameters
@@ -70,20 +70,20 @@ class ZPoolDashboard(App):
 
         :return: A ComposeResult iterable that will yield the sub-widgets for the dashboard.
         """
-        yield Header(icon="🔍", id="header")
+        yield Header(icon='🔍', id='header')
 
         self._body = Vertical(classes='panels')
         # self._body = VerticalScroll(classes='panels')
         yield self._body
 
-        yield Footer(id="footer")
+        yield Footer(id='footer')
 
     # ---------- Initial Construction ----------
     async def on_mount(self) -> None:
         """
         Initial population of the display and install timer for periodic updates
         """
-        self.title = "ZPool Monitor"
+        self.title = 'ZPool Monitor'
         await self.refresh_panels()
         self.refresh_period = self.__initial_refresh
 
