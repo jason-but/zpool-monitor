@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "zpool-monitor"
-version = "0.0.4"
+version = "0.0.5"
 authors = [
   { name="Jason But", email="jbut@swin.edu.au" },
 ]
@@ -28,7 +28,7 @@ Homepage = "https://github.com/jason-but/zpool-monitor"
 Issues = "https://github.com/jason-but/zpool-monitor/issues"
 
 [tool.setuptools]
-packages = ["zpool_monitor"]
+packages = ["zpool_monitor", "zpool_monitor.zpool", "zpool_monitor.textual" ]
 
 [tool.setuptools.package-data]
 "zpool_monitor" = ["textual/dashboard.css"]
