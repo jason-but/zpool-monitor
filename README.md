@@ -111,11 +111,11 @@ The contents of the panels are exactly the same data and format as the output of
 The initial refresh period can be specified when launching the Dashboard (default=10 seconds). The Dashboard contains three bindings to manage the refresh
 period:
 
-| Action                        | Outcome                                                                                                                                                                    |
-|:------------------------------|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Refresh now (`r`)             | Will cause the Dashboard to perform an immediate refresh of ZPool status and update the display.                                                                           |
-| Increase refresh period (`+`) | Will increase the current refresh period by one second. The current period is always displayed in the title bar. **NOTE: Maximum refresh period is capped at 60 seconds.** |
-| Decrease refresh period (`-`) | Will decrease the current refresh period by one second. The current period is always displayed in the title bar. **NOTE: Minimum refresh period is capped at 1 seconds.**  |
+| Key Binding | Action                  | Outcome                                                                                                                                                                    |
+|:------------|:------------------------|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `r`         | Refresh now             | Will cause the Dashboard to perform an immediate refresh of ZPool status and update the display.                                                                            |
+| `+`         | Increase refresh period | Will increase the current refresh period by one second. The current period is always displayed in the title bar. **NOTE: Maximum refresh period is capped at 60 seconds.** |
+| `-`         | Decrease refresh period | Will decrease the current refresh period by one second. The current period is always displayed in the title bar. **NOTE: Minimum refresh period is capped at 1 seconds.** |
 
 Key bindings for the above actions are always displayed in the Dashboard Footer. You can initiate one of these actions by either pressing the corresponding key,
 or by clicking on Footer area with the mouse.
@@ -125,10 +125,10 @@ or by clicking on Footer area with the mouse.
 The initial theme can be specified when launching the Dashboard (default is the default [Textual](https://github.com/Textualize/textual) Theme). The Dashboard
 contains two bindings to manage the current theme.
 
-| Action                 | Outcome                                                                                                                                                                                |
-|:-----------------------|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Toggle dark mode (`d`) | Will toggle the current theme between dark and light mode.                                                                                                                             |
-| Select new Theme (`t`) | Will open a selection text box listing all current themes. You may type in your new theme, use the cursor keys and enter to select a new Theme, or use the mouse to select a new Theme |
+| Key Binding | Action                  | Outcome                                                                                                                                                                                |
+|:------------|:------------------------|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `d`         | Toggle dark mode (`d`)  | Will toggle the current theme between dark and light mode.                                                                                                                             |
+| `t`         | Select new Theme (`t`)  | Will open a selection text box listing all current themes. You may type in your new theme, use the cursor keys and enter to select a new Theme, or use the mouse to select a new Theme |
 
 Key bindings for the above actions are always displayed in the Dashboard Footer. You can initiate one of these actions by either pressing the corresponding key,
 or by clicking on Footer area with the mouse.
