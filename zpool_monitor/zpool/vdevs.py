@@ -39,7 +39,7 @@ class VDEVS:
         for data in vdevs_data.values():
             vdev = VDEV(data, depth)
 
-            self.__vdevs.append(vdev.row_data)
+            self.__vdevs.append(vdev)
 
             if 'vdevs' in data:
                 self.__populate_table(depth + 1, data['vdevs'])
@@ -47,9 +47,9 @@ class VDEVS:
     @property
     def status(self) -> Table:
         """Return a rich Table representing all VDEVS parsed during the constructor"""
-        vdevs_table = Table('Device Name', 'Size', 'State', 'Device', 'Read', 'Write', 'Checksum', 'Last Trim', title=f' 🔍 Details', title_style='bold yellow', title_justify='left', show_lines=False, box=box.HORIZONTALS)
+        vdevs_table = Table(*self.__vdevs[0].label_data, title=f' 🔍 Details', title_style='bold yellow', title_justify='left', show_lines=False, box=box.HORIZONTALS)
 
         for row in self.__vdevs:
-            vdevs_table.add_row(*row)
+            vdevs_table.add_row(*row.row_data)
 
         return vdevs_table

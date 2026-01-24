@@ -36,6 +36,15 @@ class VDEV:
         # 4) VDEV device ID, if this doesn't exist, then the VDEV path. If neither exist, empty string
         # 5, 6, 7) Read/Write/Checksum error, coloured as a warning
         # 8) If the VDEV is trimmable, the current trim state (as returned by __parse_trim_state(), otherwise an empty string
+        self.__data = {'Device Name': Padding(f'{VDEV.state_colours.get(vdev_data['state'], '[bold red]')}{vdev_data['name']}', (0, 0, 0, depth * 2)),
+                       'ASize': humanise(vdev_size) if vdev_size > 0 else '',
+                       'BState': f'{VDEV.state_colours.get(vdev_data['state'], '[bold red]')}{vdev_data['state']}',
+                       'Device': vdev_data.get('devid', vdev_data.get('path', '')),
+                       'Read': warning_colour_number(vdev_data['read_errors']),
+                       'CWrite': warning_colour_number(vdev_data['write_errors']),
+                       'Checksum': warning_colour_number(vdev_data['checksum_errors']),
+                       'Last Trim': self.__parse_trim_state(vdev_data) if 'trim_notsup' in vdev_data else ''
+                       }
         self.__row_data = [Padding(f'{VDEV.state_colours.get(vdev_data['state'], '[bold red]')}{vdev_data['name']}', (0, 0, 0, depth * 2)),
                            humanise(vdev_size) if vdev_size > 0 else '',
                            f'{VDEV.state_colours.get(vdev_data['state'], '[bold red]')}{vdev_data['state']}',
@@ -78,6 +87,11 @@ class VDEV:
                 raise ValueError(f'Unexpected value (trim_nosup={vdev_data['trim_notsup']}) returned by \'zpool status\'')
 
     @property
+    def label_data(self) -> list:
+        """Return a list containing VDEV column labels to set up the header of a table for display"""
+        return list(self.__data.keys())
+
+    @property
     def row_data(self) -> list:
         """Return a list containing VDEV data to populate a single row of a table for display"""
-        return self.__row_data
+        return list(self.__data.values())
