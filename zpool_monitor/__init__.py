@@ -8,6 +8,8 @@ from zpool_monitor.zpool.scanstatus import ScanStatus
 
 from .zpool import ZPool
 
-from .monitor import Monitor, zpool_monitor_argparse
+from .cliargs import ValidPool, ValidTheme
 
-from .apps import zpool_mon
+from .monitor import Monitor #, zpool_monitor_argparse
+
+from .apps import zpool_status, zpool_monitor
