@@ -1,16 +1,13 @@
 """
 This module provides the Monitor class which can track multiple ZPools and output their status for display.
 """
+
 # Import System Libraries
-import argparse
-import subprocess
-import json
-import textwrap
 import rich.console
 
 # Import zpool.ZPool class
-from . import ValidPool, ValidTheme
 from .zpool import ZPool
+from .systemzpool import get_zpools_status
 
 
 class Monitor:
@@ -29,11 +26,9 @@ class Monitor:
         """
         Refresh the data stored in self.__pools by running 'zpool status' and parsing the output
         """
-        # Import output of 'zpool status -t -j' for all nominated pools into a string
-        result = subprocess.run(['zpool', 'status', '-t', '-j', '--json-int'] + self.__poolnames, capture_output=True, text=True, check=True)
+        # Retrieve current status for all ZPools listed in self.__poolnames and convert to instances of ZPool
+        self.__pools = {poolname: ZPool(pool_data) for poolname, pool_data in get_zpools_status(self.__poolnames).items()}
 
-        # Output is in JSON format, the 'pools' key is a dictionary mapping pool names to pool data for all scanned pools
-        self.__pools = {poolname: ZPool(pool_data) for poolname, pool_data in json.loads(result.stdout)['pools'].items()}
         return self.__pools
 
     def display(self, console: rich.console.Console) -> None:

@@ -6,16 +6,19 @@ the validators raise a suitable argparse.ArgumentTypeError for the calling argum
 
 All ArgParse Validator classes implement the __call__(arg) parameter and return the parameter if validation is successful.
 """
+
 # Import System Libraries
-import subprocess
 import argparse
 from textual.theme import BUILTIN_THEMES
+
+# Import zpool_monitor CLI Validators, Monitor Class, and zpool_monitor.textual ZPoolDashboard App
+from .systemzpool import get_zpools
 
 
 class ValidPool:
     """ArgParse Validator to validate if the provided ZPool name exists."""
-    # List of pools are extracted from running 'zpool list' on the system
-    valid_pools: list[str] = subprocess.run(['zpool', 'list', '-H', '-o', 'name'], capture_output=True, text=True, check=True).stdout.splitlines()
+    # Obtain the list of available pools once to save re-running zpool 'list' command repeatedly
+    valid_pools: list[str] = get_zpools()
 
     def __call__(self, pool) -> str:
         """

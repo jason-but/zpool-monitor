@@ -58,7 +58,7 @@ def zpool_status() -> None:
 
 
 # ---------- APPLICATION: zpool_monitor ----------
-DEFAULT_REFRESH = 10  # polling interval
+DEFAULT_REFRESH = 10  # default polling interval
 
 
 def zpool_monitor_argparse() -> argparse.Namespace:

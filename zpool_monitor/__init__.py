@@ -1,15 +1,18 @@
-from zpool_monitor.zpool.formatting import humanise, warning_colour_number, create_progress_renderable
+# Try to import the system zpool commands, this will raise an exception if the zpool command does not exist so we need to catch it and exit gracefully
+try:
+    from .systemzpool import get_zpools, get_zpools_status
 
-from zpool_monitor.zpool.vdev import VDEV
+except FileNotFoundError as e:
+    import rich
+    rich.print(f'[bold red]ERROR:[/] {e}')
+    exit(1)
 
-from zpool_monitor.zpool.vdevs import VDEVS
 
-from zpool_monitor.zpool.scanstatus import ScanStatus
-
-from .zpool import ZPool
+# Import all usable types from zpool sub-module
+from .zpool import humanise, warning_colour_number, create_progress_renderable, VDEV, VDEVS, ScanStatus, ZPool
 
 from .cliargs import ValidPool, ValidTheme
 
-from .monitor import Monitor #, zpool_monitor_argparse
+from .monitor import Monitor
 
 from .apps import zpool_status, zpool_monitor
