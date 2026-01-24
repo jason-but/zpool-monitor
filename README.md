@@ -63,11 +63,32 @@ Other screenshots are provided below.
 
 #### Screenshot of Scrub in Progress
 
-TBA...
+_Image to come_
+
+When a scrub is in progress, the information presented in the **Scrub Status** block under the VDEVs information will indicate...
+
+When a resilver is in progress, the **Scrub Status** block will be replaced with a **Resilver Status** block with a similar layout and information.
 
 #### Screenshot of Trim in Progress
 
-TBA...
+_Image to come_
+
+The information presented in the **Last Trim** field for each VDEV will vary depending on certain factors.
+
+| VDEV Trimmable  | Status                                      | Display in `Last Trim` column                                      |
+|:----------------|:--------------------------------------------|:-------------------------------------------------------------------|
+| ❌              | ---                                         | This entry in the table will be blank.                             |
+| ✅              | VDEV has never been trimmed.                | The ❌ icon will be displayed.                                      |
+| ✅              | VDEV currently being trimmed.               | A progress bar will be displayed showing the progress of the trim. |
+| ✅              | VDEV has been trimmed but not trimming now. | The date and time of the last completed trim will be displayed.    |
+
+When a trim is in progress, the information presented in the **Last Trim** field for each trimmable VDEV will indicate...
+
+For trimmable VDEVs that have never been trimmed, **Trim Status** will display t
+
+For non-trimmableblock under the VDEVs information will indicate...
+
+When a resilver is in progress, the **Scrub Status** block will be replaced with a **Resilver Status** block with a similar layout and information.
 
 ## ZPool Monitor
 
@@ -149,3 +170,5 @@ This will open a menu where you can choose one of four options.
 | Quit       | Quit the Dashboard immediately.                                                                                                                                                                                                        |
 | Screenshot | Save the current Dashboard display as an SVG file.                                                                                                                                                                                     |
 | Theme      | Open the same selection text box to change Theme as noted in the previous sub-section.                                                                                                                                                 |
+
+If you select to take a **Screenshot**, the SVG file will be saved in `~/Downloads`
