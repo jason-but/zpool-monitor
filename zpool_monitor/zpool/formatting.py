@@ -3,7 +3,6 @@ This module provides some simple utility functions that can be used elsewhere in
 """
 
 # Import System Libraries
-import re
 import math
 from rich.progress import Progress, BarColumn, TextColumn
 

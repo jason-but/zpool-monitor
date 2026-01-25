@@ -4,7 +4,9 @@ the pool can then be accessed as rich renderables for display
 """
 
 # Import System Libraries
+from typing import Any
 from rich import box
+from rich.console import RenderableType
 from rich.table import Table
 
 # Import zpool.VDEV and zpool.ScanStatus classes
@@ -12,24 +14,24 @@ from . import VDEVS, ScanStatus
 
 
 class ZPool:
-    def __init__(self, pool_data: dict):
+    def __init__(self, pool_data: dict[str, Any]):
         """
         Construct instance of class to display the status for a single pool
 
         :param pool_data: JSON Status output for single ZPool from 'zpool status' mapped to a dictionary
         """
-        self.__name = pool_data['name']
+        self.__name: str = pool_data['name']
         state_col = {'ONLINE': '[bold green]', 'OFFLINE': '[bold orange3]⚠️ ', 'DEGRADED': '[bold orange3]⚠️ '}
 
-        self.__data = {'State:': f'{state_col.get(pool_data['state'], '[bold red]⚠️ ')}{pool_data['state']}'}
+        self.__data: dict[str, RenderableType] = {'State:': f'{state_col.get(pool_data['state'], '[bold red]⚠️ ')}{pool_data['state']}'}
         if 'status' in pool_data: self.__data['Status:'] = f'[red]🚩 {pool_data['status'].translate(str.maketrans('\n', ' ', '\t'))}'
         if 'action' in pool_data: self.__data['Action:'] = f'[red]📝 {pool_data['action'].translate(str.maketrans('\n', ' ', '\t'))}'
         self.__data['Errors:'] = 'No known data errors' if pool_data['error_count'] == 0 else f'[red]⚠️ Detected {pool_data['error_count']} data errors'
 
-        self.__vdevs = VDEVS(pool_data['vdevs'])
+        self.__vdevs = VDEVS(vdevs_data=pool_data['vdevs'])
 
         # If the pool contains scan information, store them in __scan_stats
-        self.__scan_stats = ScanStatus(pool_data['scan_stats']) if 'scan_stats' in pool_data else None
+        self.__scan_stats = ScanStatus(scan_data=pool_data['scan_stats']) if 'scan_stats' in pool_data else None
 
     @property
     def poolname(self) -> str:
@@ -43,11 +45,11 @@ class ZPool:
         """
         :return: Return summary information about the pool as a rich Table for display
         """
-        summary_table = Table('Property', 'Value', show_header=False, show_lines=False, box=box.SIMPLE)
+        table = Table('Property', 'Value', show_header=False, show_lines=False, box=box.SIMPLE)
         for key, value in self.__data.items():
-            summary_table.add_row(key, value)
+            table.add_row(key, value)
 
-        return summary_table
+        return table
 
     @property
     def vdevs(self) -> Table:
