@@ -8,7 +8,6 @@ Header {
 /* Footer is docked to the bottom */
 Footer {
     dock: bottom;                /* Docked to bottom of screen */
-
 }
 
 /* Vertical Container Widget representing main body of Dashboard
@@ -25,18 +24,15 @@ Footer {
 /* ZPoolPanel Widget
    - All instances assigned a class of 'zpoolpanel'
 */
-.zpoolpanel {
+.zpoolpanel { /**/
+/*.zpoolscroller {/**/
     border: round;               /* Style and colour of border around panel */
     height: 1fr;                /* Should allow panel to grow as tall as is required */
-/*        max-height: 20;              /* For testing, set max-height */
+    /*max-height: 1fr;              /* For testing, set max-height */
     border-title-style: bold;    /* Panel Title font style */
     border-title-color: $accent; /* Panel Title text colour */
     padding: 0 1 0 1;            /* Padding between border and Panel content: 1 character at left and right, none at top and bottom */
     margin: 1 0;                 /* Spacing between panels in layout: 1 character between panels */
-}
-
-Static {
-    height: auto;
 }
 
 /* Style for VerticalScroll layout container within each ZPoolPanel Widget */
@@ -47,8 +43,9 @@ Static {
       o Panels contain too much content
 
 /* Style for all widgets assigned a class of zpoolscroller */
-.zapoolscroller {
+.zpoolscrollera {
     height: auto;    /* */
+    max-height: 1fr;              /* For testing, set max-height */
 /*      overflow: auto;  /* */
 }
 
