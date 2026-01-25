@@ -132,41 +132,20 @@ class ZPoolDashboard(App):
         # new_pools is a set of all pool names that do not already have a panel
         new_pools = scanned_pools.keys() - current_panels.keys()
 
-        # existing_pools is a set of all pool names that both exist and have an existing panel in the UI
-        existing_pools = scanned_pools.keys() & current_panels.keys()
-
-        # removed_pools is a set of all pool names that have panels but are no longer on the system
-        removed_pools = current_panels.keys() - scanned_pools.keys()
-
-        # Add new panels
-        for poolname in sorted(new_pools):
-            panel = ZPoolPanel(scanned_pools[poolname], id=f'panel_{poolname}')
-            await self._body.mount(panel)
-
-        # Update existing panels
-        for poolname in existing_pools:
-            current_panels[poolname].update_zpool_data((scanned_pools[poolname]))
-
-        # Remove panels for ZPools that no longer exist - to_remove_keys will be all pool names that have panels but are no longer on the system
-        for poolname in removed_pools:
+        # 1) Remove panels for ZPools that no longer exist (all pool names that have panels but are no longer on the system)
+        for poolname in (current_panels.keys() - scanned_pools.keys()):
             await current_panels[poolname].remove()
 
-        # Optionally, sort tiles by name or size by reordering children
-        # Here we keep mounting order; uncomment to sort by name:
-        # new_panels: dict[str, ZPoolPanel] = {}
-        # for poolname, pool in scanned_pools.items():
-        #     if poolname in new_pools:
-        #         new_panels[poolname] = ZPoolPanel(pool, id=f'panel_{poolname}')
-        #     else:
-        #         new_panels[poolname] = current_panels[poolname]
-        #         new_panels[poolname].update_zpool_data(pool)
-        # await self._grid.remove_children(*self._grid.children)
-        # await self._grid.mount(*new_panels.values())
+        # 2) Update display for existing panels (all pool names that both exist and have an existing panel in the UI)
+        for poolname in (scanned_pools.keys() & current_panels.keys()):
+            current_panels[poolname].update_zpool_data((scanned_pools[poolname]))
 
+        # 3) Add new panels to the system (all pool names that do not already have a panel) ONLY IF there are panels to insert
+        if scanned_pools.keys() - current_panels.keys():
+            # Construct list of all panels in sorted order (scanned_pools already sorted)
+            # - If poolname exists, copy it from current_panels, otherwise provide default of a new ZPoolPanel initialised with the ZPool instance in scanned_pools
+            sorted_panels: list[ZPoolPanel] = [current_panels.get(poolname, ZPoolPanel(pool, id=f'panel_{poolname}')) for poolname, pool in scanned_pools.items()]
 
-        # ordered = sorted(
-        #     [w for w in tiles_grid.children if isinstance(w, DirectoryTile)],
-        #     key=lambda w: (w.stats.name.lower() if w.stats else "")
-        # )
-        # await tiles_grid.remove_children(*tiles_grid.children)
-        # await tiles_grid.mount(*ordered)
+            # As we are inserting panels and we don't know where they belong, we remove all panels from the display and remount all those in new_panels
+            await self._body.remove_children(self._body.children)
+            await self._body.mount(*sorted_panels)
