@@ -47,7 +47,7 @@ def zpool_status() -> None:
         # ZPool status is retrieved from the Monitor class. We need to refresh the status before displaying them
         monitor = Monitor(poolnames=arguments.poolname)
         monitor.refresh_stats()
-        monitor.display(console)
+        monitor.display(console=console)
 
     except KeyboardInterrupt:
         pass

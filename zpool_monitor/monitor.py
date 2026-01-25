@@ -27,7 +27,7 @@ class Monitor:
         Refresh the data stored in self.__pools by running 'zpool status' and parsing the output
         """
         # Retrieve current status for all ZPools listed in self.__poolnames and convert to instances of ZPool
-        self.__pools = {poolname: ZPool(pool_data) for poolname, pool_data in get_zpools_status(self.__poolnames).items()}
+        self.__pools = {poolname: ZPool(pool_data=pool_data) for poolname, pool_data in get_zpools_status(poolnames=self.__poolnames).items()}
 
         return self.__pools
 
