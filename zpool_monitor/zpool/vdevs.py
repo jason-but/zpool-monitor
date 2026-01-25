@@ -4,6 +4,7 @@ can then be accessed as a rich Table for display
 """
 
 # Import System Libraries
+from typing import Any
 from rich.table import Table
 from rich import box
 
@@ -15,41 +16,38 @@ class VDEVS:
     """
     Maps all VDEVS within a single pool to a table for display purposes
     """
-    def __init__(self, vdevs_data:dict):
+    def __init__(self, vdevs_data:dict[str, Any]):
         """
         Construct instance of class to map status for all VDEVS within a pool
 
-        Calls member method to recursively traverse vdevs_data to populat self.__vdevs
+        Calls member method to recursively traverse vdevs_data to populate self.__vdevs
 
         :param vdevs_data: JSON output for single VDEV from 'zpool status' mapped to a dictionary
         """
-        # __vdevs is a list of lists, each upper list element contains data for a single VDEV in the pool. This data is organised as a list of rich
-        # renderables for display in table format
-        self.__vdevs = []
+        # __vdevs is a list of VDEV instances
+        self.__vdevs: list[VDEV] = []
 
-        self.__populate_table(0, vdevs_data)
+        self.__populate_table(vdevs_data=vdevs_data, depth=0)
 
-    def __populate_table(self, depth: int, vdevs_data: dict) -> None:
+    def __populate_table(self, vdevs_data: dict, depth: int) -> None:
         """
-        Recursively traverses vdevs_data to create a tree of VDEV devices which are then flattened into a list of rows in self.__vdevs
+        Recursively traverses vdevs_data to create a tree of VDEV devices which are then flattened into a list of VDEV instances in self.__vdevs
 
         :param depth: Count of depth of VDEV in pool, 0=top level, 1=actual device for no RAID, or RAID type, 2=actual device within RAID
         :param vdevs_data: JSON output (from 'zpool status' mapped to a dictionary) for a single VDEV OR a VDEV containing multiple VDEVs
         """
         for data in vdevs_data.values():
-            vdev = VDEV(data, depth)
-
-            self.__vdevs.append(vdev)
+            self.__vdevs.append(VDEV(vdev_data=data, depth=depth))
 
             if 'vdevs' in data:
-                self.__populate_table(depth + 1, data['vdevs'])
+                self.__populate_table(vdevs_data=data['vdevs'], depth=depth + 1)
 
     @property
     def status(self) -> Table:
         """Return a rich Table representing all VDEVS parsed during the constructor"""
-        vdevs_table = Table(*self.__vdevs[0].label_data, title=f' 🔍 Details', title_style='bold yellow', title_justify='left', show_lines=False, box=box.HORIZONTALS)
+        table = Table(*self.__vdevs[0].label_data, title=f' 🔍 Details', title_style='bold yellow', title_justify='left', show_lines=False, box=box.HORIZONTALS)
 
-        for row in self.__vdevs:
-            vdevs_table.add_row(*row.row_data)
+        for vdev in self.__vdevs:
+            table.add_row(*vdev.row_data)
 
-        return vdevs_table
+        return table
