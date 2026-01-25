@@ -129,9 +129,6 @@ class ZPoolDashboard(App):
         # Retrieve all panels currently monitoring a pool
         current_panels: Dict[str, ZPoolPanel] = {panel.zpool_data.poolname: panel for panel in self._body.children if isinstance(panel, ZPoolPanel) and panel.zpool_data.poolname}
 
-        # new_pools is a set of all pool names that do not already have a panel
-        new_pools = scanned_pools.keys() - current_panels.keys()
-
         # 1) Remove panels for ZPools that no longer exist (all pool names that have panels but are no longer on the system)
         for poolname in (current_panels.keys() - scanned_pools.keys()):
             await current_panels[poolname].remove()
