@@ -7,6 +7,7 @@ information for the ScanStatus can then be accessed as a rich Table for display
 from datetime import datetime, timedelta
 from typing import Any
 from rich import box
+from rich.console import RenderableType
 from rich.pretty import Pretty
 from rich.table import Table
 
@@ -18,22 +19,26 @@ class ScanStatus:
     """
     Maps the Scan Status for a single pool to a table for display purposes
     """
-    def __init__(self, scan_data: dict):
+    def __init__(self, scan_data: dict[str, Any]):
         """
         Construct instance of class to display the scan status for a single pool
 
         :param scan_data: JSON Scan Status output for single ZPool from 'zpool status' mapped to a dictionary
         """
-        self.__table_title = '❌ Unknown Function Status'
-        self.__status: dict[str, list[Any]] = {}
+        self.__table_title = ''
+
+        # Status information stored in dictionary mapping property to value. Value is stored as a list of Renderables so when a scrub/resilver is progressing
+        # the status text and progress bars are neatly organised into columns
+        self.__status: dict[str, list[RenderableType]] = {}
 
         self.__function = scan_data['function']
+        # Different method called for each scan type to simplify code reading
         match self.__function:
-            case 'SCRUB': self.__get_scrub_status(scan_data)
-            case 'RESILVER': self.__get_resilver_status(scan_data)
-            case _: self.__get_unknown_status(scan_data)
+            case 'SCRUB': self.__get_scrub_status(scan_data=scan_data)
+            case 'RESILVER': self.__get_resilver_status(scan_data=scan_data)
+            case _: self.__get_unknown_status(scan_data=scan_data)
 
-    def __get_scrub_status(self, scan_data: dict) -> None:
+    def __get_scrub_status(self, scan_data: dict[str, Any]) -> None:
         """
         Parse the Scan Status dictionary for data regarding a scrub, extract information and populate self.__status with data to display in a table when
         retrieved.
