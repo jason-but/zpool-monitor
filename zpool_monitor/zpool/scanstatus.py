@@ -95,11 +95,11 @@ class ScanStatus:
         :param processed_icon: Icon to display as image for scan_data['processed']
         """
         to_scan: int = scan_data['to_examine'] - scan_data['skipped']
-        time_elapsed: timedelta = datetime.now().timestamp() - scan_data['pass_start']
+        time_elapsed: float = datetime.now().timestamp() - scan_data['pass_start']
         issued: int = scan_data['issued']
         scan_complete: float = 100 * scan_data['examined'] / to_scan
         issue_complete: float = 100 * issued / to_scan
-        issue_rate: float = max(issued / time_elapsed.seconds, 1)
+        issue_rate: float = max(issued / time_elapsed, 1)
         time_left: timedelta = timedelta(seconds=round((to_scan - issued) / issue_rate))
 
         self.__status['Started:'] = [f'🕓 {datetime.fromtimestamp(scan_data['start_time']).strftime('%c')}']
