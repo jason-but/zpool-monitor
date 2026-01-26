@@ -63,7 +63,7 @@ class ScanStatus:
                 scan_complete = 100 * scan_data['examined'] / to_scan
                 issue_complete = 100 * issued / to_scan
                 issue_rate = max(issued / time_elapsed, 1)
-                time_left = timedelta(seconds=(to_scan - issued) / issue_rate)
+                time_left = timedelta(seconds=round((to_scan - issued) / issue_rate))
 
                 self.__status['Started:'] = [f'🕓 {datetime.fromtimestamp(scan_data['start_time']).strftime('%c')}']
                 self.__status['Scanned:'] = [f'🔍 {humanise(scan_data['examined'])} of {humanise(scan_data['to_examine'])}',
@@ -101,7 +101,7 @@ class ScanStatus:
                 scan_complete = 100 * scan_data['examined'] / to_scan
                 issue_complete = 100 * issued / to_scan
                 issue_rate = max(issued / time_elapsed, 1)
-                time_left = timedelta(seconds=(to_scan - issued) / issue_rate)
+                time_left = timedelta(seconds=round((to_scan - issued) / issue_rate))
 
                 self.__status['Started:'] = [f'🕓 {datetime.fromtimestamp(scan_data['start_time']).strftime('%c')}']
                 self.__status['Scanned:'] = [f'🔍 {humanise(scan_data['examined'])} of {humanise(scan_data['to_examine'])}',
