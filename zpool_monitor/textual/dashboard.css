@@ -14,9 +14,8 @@ Footer {
    - Single instance assigned a class of 'panels'
    - All panels displayed vertically
 */
-.panelas {
-    width: 50%;     /* For testing, set width of display */
-    height: 1fr;                 /* VerticalScoll instance should fill - but not overflow - screen */
+.panels {
+    height: 1fr;                 /* VerticalScroll instance should fill - but not overflow - screen */
     overflow: auto;              /* Assign a scroll-bar if needed */
     padding: 1;                  /* Buffer space of one character from edge of header, footer, and edge of screen */
 }
@@ -24,29 +23,20 @@ Footer {
 /* ZPoolPanel Widget
    - All instances assigned a class of 'zpoolpanel'
 */
-.zpoolpanel { /**/
-/*.zpoolscroller {/**/
+.zpoolpanel {
     border: round;               /* Style and colour of border around panel */
-    height: 1fr;                /* Should allow panel to grow as tall as is required */
-    /*max-height: 1fr;              /* For testing, set max-height */
+    height: auto;                /* Panel initially set to auto-height. Code will modify if needed to make panels fit */
     border-title-style: bold;    /* Panel Title font style */
     border-title-color: $accent; /* Panel Title text colour */
     padding: 0 1 0 1;            /* Padding between border and Panel content: 1 character at left and right, none at top and bottom */
     margin: 1 0;                 /* Spacing between panels in layout: 1 character between panels */
 }
 
-/* Style for VerticalScroll layout container within each ZPoolPanel Widget */
-/*  - Assigned class of zpoolscroller in code
-    - Each ZPoolPanel Widget
-    - Needed if:
-      o Too many Panels to fit on screen
-      o Panels contain too much content
-
 /* Style for all widgets assigned a class of zpoolscroller */
-.zpoolscrollera {
-    height: auto;    /* */
-    max-height: 1fr;              /* For testing, set max-height */
-/*      overflow: auto;  /* */
+.zpoolscroller {
+    height: auto;                /* Default height to match .zpoolpanel - changed when panel height is calculated */
+    overflow-x: hidden;          /* No horizontal scrollbar */
+    scrollbar-gutter: stable;    /* Reserve the vertical scrollbar column at all times so that all table rows remain visible even if scrollbar is hidden */
 }
 
 /* Style for Static Widgets displaying Rich Tables within a ZPoolPanel Widget
